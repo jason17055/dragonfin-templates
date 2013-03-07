@@ -1,0 +1,33 @@
+<project name="dragonfin-templates" default="all">
+
+<target name="all" depends="build" />
+
+<target name="init-builddir">
+<mkdir dir="build" />
+</target>
+
+<target name="compile" depends="init-builddir">
+<mkdir dir="build/classes" />
+<javac srcdir="src" destdir="build/classes"
+	includeantruntime="false"
+	debug="true" debuglevel="lines,vars,source"
+	source="1.6" target="1.6"
+	>
+	<compilerarg value="-Xlint:unchecked" />
+	<compilerarg value="-Xlint:deprecation" />
+</javac>
+</target>
+
+<target name="build" depends="compile">
+<jar destfile="${ant.project.name}.jar"
+	basedir="build/classes">
+</jar>
+
+</target>
+
+<target name="clean">
+<delete dir="build" />
+<delete file="${ant.project.name}.jar" />
+</target>
+
+</project>
