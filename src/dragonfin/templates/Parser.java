@@ -63,6 +63,8 @@ class Parser
 		CLOSE_BRACKET,
 		OPEN_PAREN,
 		CLOSE_PAREN,
+		OPEN_BRACE,
+		CLOSE_BRACE,
 		QUESTION,
 		COLON,
 	//other
@@ -91,6 +93,8 @@ class Parser
 	static final Token CLOSE_PAREN= new Token(TokenType.CLOSE_PAREN, ")");
 	static final Token OPEN_BRACKET = new Token(TokenType.OPEN_BRACKET, "[");
 	static final Token CLOSE_BRACKET= new Token(TokenType.CLOSE_BRACKET, "]");
+	static final Token OPEN_BRACE = new Token(TokenType.OPEN_BRACE, "{");
+	static final Token CLOSE_BRACE= new Token(TokenType.CLOSE_BRACE, "}");
 	static final Token COMMA = new Token(TokenType.COMMA, ",");
 	static final Token QUESTION = new Token(TokenType.QUESTION, "?");
 	static final Token COLON = new Token(TokenType.COLON, ":");
@@ -232,6 +236,10 @@ class Parser
 					return OPEN_PAREN;
 				} else if (c == ')') {
 					return CLOSE_PAREN;
+				} else if (c == '{') {
+					return OPEN_BRACE;
+				} else if (c == '}') {
+					return CLOSE_BRACE;
 				} else if (c == ',') {
 					return COMMA;
 				} else if (c == '?') {
@@ -885,6 +893,24 @@ class Parser
 		return new Expressions.ArrayLiteral(parts);
 	}
 
+	private Expression parseHashLiteral()
+		throws IOException, TemplateSyntaxException
+	{
+		eatToken(TokenType.OPEN_BRACE);
+
+		List<SetDirective> parts;
+		if (isSetListStart(peekToken())) {
+			parts = parseSetList();
+		}
+		else {
+			parts = new ArrayList<SetDirective>();
+		}
+			
+		eatToken(TokenType.CLOSE_BRACE);
+
+		return new Expressions.HashLiteral(parts);
+	}
+
 	private Expression parseChain()
 		throws IOException, TemplateSyntaxException
 	{
@@ -896,6 +922,10 @@ class Parser
 		else if (t == TokenType.OPEN_BRACKET)
 		{
 			return parseArrayLiteral();
+		}
+		else if (t == TokenType.OPEN_BRACE)
+		{
+			return parseHashLiteral();
 		}
 		else if (t == TokenType.SINGLE_QUOTE_STRING)
 		{

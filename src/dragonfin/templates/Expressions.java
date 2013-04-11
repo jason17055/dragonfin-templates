@@ -49,6 +49,28 @@ public class Expressions
 		}
 	}
 
+	static class HashLiteral extends Expression
+	{
+		List<SetDirective> parts;
+		public HashLiteral(List<SetDirective> parts)
+		{
+			this.parts = parts;
+		}
+
+		@Override
+		public Object evaluate(Context ctx)
+			throws TemplateRuntimeException
+		{
+			HashMap<String,Object> hash = new HashMap<String,Object>();
+			for (SetDirective sd : parts)
+			{
+				sd.executeOnHash(ctx, hash);
+			}
+
+			return hash;
+		}
+	}
+
 	static class CompareExpression extends Expression
 	{
 		Expression lhs;
