@@ -63,6 +63,8 @@ class Parser
 		CLOSE_BRACKET,
 		OPEN_PAREN,
 		CLOSE_PAREN,
+		QUESTION,
+		COLON,
 	//other
 		IDENTIFIER,
 		EOF;
@@ -90,6 +92,8 @@ class Parser
 	static final Token OPEN_BRACKET = new Token(TokenType.OPEN_BRACKET, "[");
 	static final Token CLOSE_BRACKET= new Token(TokenType.CLOSE_BRACKET, "]");
 	static final Token COMMA = new Token(TokenType.COMMA, ",");
+	static final Token QUESTION = new Token(TokenType.QUESTION, "?");
+	static final Token COLON = new Token(TokenType.COLON, ":");
 
 	private Token makeIdentifier(String s)
 	{
@@ -230,6 +234,10 @@ class Parser
 					return CLOSE_PAREN;
 				} else if (c == ',') {
 					return COMMA;
+				} else if (c == '?') {
+					return QUESTION;
+				} else if (c == ':') {
+					return COLON;
 				} else if (c == '=') {
 					st = 5;
 				} else if (c == '|') {
@@ -837,6 +845,16 @@ class Parser
 	{
 		assert isExpressionStart(peekToken());
 		Expression e = parseComparison();
+
+		TokenType t = peekToken();
+		if (t == TokenType.QUESTION)
+		{
+			eatToken(t);
+			Expression e1 = parseExpression();
+			eatToken(TokenType.COLON);
+			Expression e2 = parseExpression();
+			return new IfExpression(e, e1, e2);
+		}
 		return e;
 	}
 

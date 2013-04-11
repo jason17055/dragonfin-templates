@@ -105,6 +105,33 @@ public class Expressions
 	}
 }
 
+class IfExpression extends Expression
+{
+	Expression condition;
+	Expression trueExpr;
+	Expression falseExpr;
+
+	public IfExpression(Expression condition, Expression trueExpr, Expression falseExpr)
+	{
+		this.condition = condition;
+		this.trueExpr = trueExpr;
+		this.falseExpr = falseExpr;
+	}
+
+	@Override
+	public Object evaluate(Context ctx)
+		throws TemplateRuntimeException
+	{
+		boolean eval = Value.asBoolean(condition.evaluate(ctx));
+		if (eval) {
+			return trueExpr.evaluate(ctx);
+		}
+		else {
+			return falseExpr.evaluate(ctx);
+		}
+	}
+}
+
 class Concatenate extends Expression
 {
 	Expression lhs;
