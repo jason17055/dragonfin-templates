@@ -917,7 +917,10 @@ class Parser
 		TokenType t = peekToken();
 		if (t == TokenType.OPEN_PAREN)
 		{
-			throw new Error("TODO");
+			eatToken(TokenType.OPEN_PAREN);
+			Expression expr = parseExpression();
+			eatToken(TokenType.CLOSE_PAREN);
+			return expr;
 		}
 		else if (t == TokenType.OPEN_BRACKET)
 		{
