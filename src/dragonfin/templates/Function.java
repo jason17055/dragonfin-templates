@@ -1,6 +1,6 @@
 package dragonfin.templates;
 
-public interface Invocable
+public interface Function
 {
 	Object invoke(Object... args) throws Exception;
 }
