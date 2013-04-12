@@ -2,6 +2,8 @@ package dragonfin.templates;
 
 import java.io.*;
 import java.util.*;
+import javax.script.Bindings;
+import javax.script.SimpleBindings;
 
 public class TemplateToolkit
 {
@@ -17,7 +19,7 @@ public class TemplateToolkit
 		this.filters.put("lc", new LowercaseFilter());
 	}
 
-	public void process(String templateName, Map<String,?> vars, Writer out)
+	public void process(String templateName, Bindings vars, Writer out)
 		throws IOException, TemplateSyntaxException, TemplateRuntimeException
 	{
 		Context ctx = new Context();
@@ -28,7 +30,7 @@ public class TemplateToolkit
 
 		if (ctx.vars == null)
 		{
-			ctx.vars = new HashMap<String,Object>();
+			ctx.vars = new SimpleBindings();
 		}
 		processHelper(templateName, ctx);
 	}
@@ -60,7 +62,7 @@ public class TemplateToolkit
 				new DefaultResourceLoader()
 				);
 		OutputStreamWriter w = new OutputStreamWriter(System.out);
-		toolkit.process(args[0], System.getenv(), w);
+		toolkit.process(args[0], new ScopedVariables(System.getenv()), w);
 		w.close();
 	}
 
