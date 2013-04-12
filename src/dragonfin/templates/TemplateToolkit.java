@@ -1,6 +1,7 @@
 package dragonfin.templates;
 
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.*;
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
@@ -17,6 +18,7 @@ public class TemplateToolkit
 		this.filters.put("html", new HtmlFilter());
 		this.filters.put("uc", new UppercaseFilter());
 		this.filters.put("lc", new LowercaseFilter());
+		this.filters.put("uri", new UriFilter());
 	}
 
 	public void process(String templateName, Bindings vars, Writer out)
@@ -71,6 +73,21 @@ public class TemplateToolkit
 		public String apply(String s)
 		{
 			return s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;");
+		}
+	}
+
+	static class UriFilter implements Filter
+	{
+		public String apply(String s)
+		{
+			try
+			{
+			return URLEncoder.encode(s, "UTF-8");
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				throw new Error("unexpected: "+e,e);
+			}
 		}
 	}
 

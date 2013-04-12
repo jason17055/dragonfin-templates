@@ -1,6 +1,7 @@
 package dragonfin.templates;
 
 import java.util.*;
+import javax.script.SimpleBindings;
 
 class FunctionCall extends Expression
 {
@@ -17,6 +18,19 @@ class FunctionCall extends Expression
 	Object evaluate(Context ctx)
 		throws TemplateRuntimeException
 	{
-		throw new TemplateRuntimeException("not implemented");
+		SimpleBindings argValues = new SimpleBindings();
+		for (int i = 0; i < arguments.size(); i++) {
+			Object v = arguments.get(i).expr.evaluate(ctx);
+			argValues.put(new Integer(i+1).toString(), v);
+		}
+
+		if (ctx.toolkit.filters.containsKey(functionName)) {
+			// apply a filter
+			Filter f = ctx.toolkit.filters.get(functionName);
+			return f.apply(Value.asString(argValues.get("1")));
+		}
+		else {
+			throw new TemplateRuntimeException("not implemented ("+functionName+")");
+		}
 	}
 }
