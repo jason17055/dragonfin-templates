@@ -71,6 +71,43 @@ public class Expressions
 		}
 	}
 
+	static class ArithmeticExpression extends Expression
+	{
+		Expression lhs;
+		Parser.TokenType op;
+		Expression rhs;
+		public ArithmeticExpression(Expression lhs, Parser.TokenType op, Expression rhs)
+		{
+			this.lhs = lhs;
+			this.op = op;
+			this.rhs = rhs;
+		}
+
+		@Override
+		public Object evaluate(Context ctx)
+			throws TemplateRuntimeException
+		{
+			Object a = lhs.evaluate(ctx);
+			Object b = rhs.evaluate(ctx);
+
+			int a1 = Value.asInt(a);
+			int b1 = Value.asInt(b);
+
+			if (op == Parser.TokenType.PLUS)
+			{
+				return new Integer(a1+b1);
+			}
+			else if (op == Parser.TokenType.MINUS)
+			{
+				return new Integer(a1-b1);
+			}
+			else
+			{
+				throw new Error("invalid arithmetic op: "+op);
+			}
+		}
+	}
+
 	static class CompareExpression extends Expression
 	{
 		Expression lhs;

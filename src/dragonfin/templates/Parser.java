@@ -67,6 +67,8 @@ class Parser
 		CLOSE_BRACE,
 		QUESTION,
 		COLON,
+		PLUS,
+		MINUS,
 	//other
 		IDENTIFIER,
 		EOF;
@@ -98,6 +100,8 @@ class Parser
 	static final Token COMMA = new Token(TokenType.COMMA, ",");
 	static final Token QUESTION = new Token(TokenType.QUESTION, "?");
 	static final Token COLON = new Token(TokenType.COLON, ":");
+	static final Token PLUS = new Token(TokenType.PLUS, "+");
+	static final Token MINUS = new Token(TokenType.MINUS, "-");
 
 	private Token makeIdentifier(String s)
 	{
@@ -224,36 +228,42 @@ class Parser
 				}
 				break;
 			case 2:
-				if (c == '%') {
+				if (c == '"') {
+					st = 9;
+				} else if (c == '#') {
+					st = 7;
+				} else if (c == '%') {
 					st = 3;
-				} else if (c == '.') {
-					return DOT;
-				} else if (c == '[') {
-					return OPEN_BRACKET;
-				} else if (c == ']') {
-					return CLOSE_BRACKET;
+				} else if (c == '\'') {
+					st = 6;
 				} else if (c == '(') {
 					return OPEN_PAREN;
 				} else if (c == ')') {
 					return CLOSE_PAREN;
-				} else if (c == '{') {
-					return OPEN_BRACE;
-				} else if (c == '}') {
-					return CLOSE_BRACE;
+				} else if (c == '+') {
+					return PLUS;
 				} else if (c == ',') {
 					return COMMA;
-				} else if (c == '?') {
-					return QUESTION;
+				} else if (c == '-') {
+					return MINUS;
+				} else if (c == '.') {
+					return DOT;
 				} else if (c == ':') {
 					return COLON;
 				} else if (c == '=') {
 					st = 5;
+				} else if (c == '?') {
+					return QUESTION;
+				} else if (c == '[') {
+					return OPEN_BRACKET;
+				} else if (c == ']') {
+					return CLOSE_BRACKET;
+				} else if (c == '{') {
+					return OPEN_BRACE;
 				} else if (c == '|') {
 					return FILTER;
-				} else if (c == '\'') {
-					st = 6;
-				} else if (c == '"') {
-					st = 9;
+				} else if (c == '}') {
+					return CLOSE_BRACE;
 				} else if (Character.isJavaIdentifierStart(c)) {
 					cur.append((char)c);
 					st = 4;
@@ -262,8 +272,6 @@ class Parser
 					st = 11;
 				} else if (Character.isWhitespace(c)) {
 					//do nothing
-				} else if (c == '#') {
-					st = 7;
 				} else if (c == -1) {
 					st = -1;
 					return null;
@@ -829,6 +837,24 @@ class Parser
 	}
 
 	private Expression parseArith()
+		throws IOException, TemplateSyntaxException
+	{
+		Expression lhs = parseTerm();
+		for (;;)
+		{
+			TokenType t = peekToken();
+			if (t == TokenType.PLUS || t == TokenType.MINUS) {
+				eatToken(t);
+				Expression rhs = parseTerm();
+				lhs = new Expressions.ArithmeticExpression(lhs, t, rhs);
+			}
+			else {
+				return lhs;
+			}
+		}
+	}
+
+	private Expression parseTerm()
 		throws IOException, TemplateSyntaxException
 	{
 		return parseChain();
