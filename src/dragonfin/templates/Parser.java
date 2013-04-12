@@ -957,10 +957,32 @@ class Parser
 		}
 	}
 
-	private List<Expression> parseArgs()
+	private boolean isArgStart(TokenType t)
+	{
+		return isExpressionStart(t);
+	}
+
+	private Argument parseArg()
 		throws IOException, TemplateSyntaxException
 	{
-		ArrayList<Expression> args = new ArrayList<Expression>();
+		
+		Expression lhs = parseExpression();
+
+		if (peekToken() == TokenType.ASSIGN) {
+
+			eatToken(TokenType.ASSIGN);
+
+			Expression rhs = parseExpression();
+			return new NamedArgument(lhs, rhs);
+		}
+
+		return new SimpleArgument(lhs);
+	}
+
+	private List<Argument> parseArgs()
+		throws IOException, TemplateSyntaxException
+	{
+		ArrayList<Argument> args = new ArrayList<Argument>();
 		for (;;)
 		{
 			if (peekToken() == TokenType.COMMA)
@@ -968,13 +990,10 @@ class Parser
 				eatToken(TokenType.COMMA);
 				continue;
 			}
-			else if (isExpressionStart(peekToken()))
+			else if (isArgStart(peekToken()))
 			{
-				Expression lhs = parseExpression();
-				//TODO- support named arguments
-
-				args.add(lhs);
-				continue;
+				Argument a = parseArg();
+				args.add(a);
 			}
 			else
 			{
@@ -991,7 +1010,7 @@ class Parser
 		if (peekToken() == TokenType.OPEN_PAREN)
 		{
 			eatToken(TokenType.OPEN_PAREN);
-			List<Expression> args = parseArgs();
+			List<Argument> args = parseArgs();
 			eatToken(TokenType.CLOSE_PAREN);
 			return new FunctionCall(itemName, args);
 		}
@@ -1018,7 +1037,7 @@ class Parser
 			{
 				FunctionCall fc = (FunctionCall) rhs;
 				String methodName = fc.functionName;
-				List<Expression> args = fc.arguments;
+				List<Argument> args = fc.arguments;
 				lhs = new MethodCall(lhs, methodName, args);
 			}
 			else
@@ -1039,9 +1058,9 @@ class Parser
 	static class FunctionCall extends Expression
 	{
 		String functionName;
-		List<Expression> arguments;
+		List<Argument> arguments;
 
-		FunctionCall(String functionName, List<Expression> arguments)
+		FunctionCall(String functionName, List<Argument> arguments)
 		{
 			this.functionName = functionName;
 			this.arguments = arguments;
