@@ -15,10 +15,10 @@ class SimpleArgument extends Argument
 
 class NamedArgument extends Argument
 {
-	Expression ident;
-	NamedArgument(Expression ident, Expression expr)
+	String name;
+	NamedArgument(String name, Expression expr)
 	{
-		this.ident = ident;
+		this.name = name;
 		this.expr = expr;
 	}
 }

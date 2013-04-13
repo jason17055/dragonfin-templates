@@ -1,0 +1,12 @@
+[% a='alpha' b='bravo' c='charlie' d='delta' e='echo' f='frank' g='golf' %]
+
+[% args(a b c) %]
+
+[% args(a b c d=e f=g) %]
+
+[% args(a, b, c, d=e, f=g) %]
+
+[% args(a, b, c, d=e, f=g,) %]
+
+[% args(d=e, a, b, f=g, c) %]
+

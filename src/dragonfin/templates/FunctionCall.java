@@ -19,10 +19,19 @@ class FunctionCall extends Expression
 		throws TemplateRuntimeException
 	{
 		SimpleBindings argValues = new SimpleBindings();
+		int unnamedCount = 0;
 		for (int i = 0; i < arguments.size(); i++) {
-			Object v = arguments.get(i).expr.evaluate(ctx);
-			argValues.put(new Integer(i+1).toString(), v);
+			Argument arg = arguments.get(i);
+			Object v = arg.expr.evaluate(ctx);
+			String k;
+			if (arg instanceof NamedArgument) {
+				k = ((NamedArgument) arg).name;
+			} else {
+				k = new Integer(++unnamedCount).toString();
+			}
+			argValues.put(k, v);
 		}
+		argValues.put("#", new Integer(unnamedCount));
 
 		if (ctx.vars.containsKey(functionName)) {
 			Object x = ctx.vars.get(functionName);

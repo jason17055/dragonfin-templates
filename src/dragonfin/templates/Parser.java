@@ -997,12 +997,14 @@ class Parser
 		
 		Expression lhs = parseExpression();
 
-		if (peekToken() == TokenType.ASSIGN) {
+		if (peekToken() == TokenType.ASSIGN &&
+			lhs instanceof Variable) {
 
 			eatToken(TokenType.ASSIGN);
 
+			String varName = ((Variable) lhs).variableName;
 			Expression rhs = parseExpression();
-			return new NamedArgument(lhs, rhs);
+			return new NamedArgument(varName, rhs);
 		}
 
 		return new SimpleArgument(lhs);
