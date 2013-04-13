@@ -678,11 +678,7 @@ class Parser
 		throws IOException, TemplateSyntaxException
 	{
 		TokenType token = peekToken();
-		if (token == TokenType.BLOCK)
-		{
-			return parseBlockDirective();
-		}
-		else if (token == TokenType.DEFAULT)
+		if (token == TokenType.DEFAULT)
 		{
 			return parseDefaultDirective();
 		}
@@ -904,15 +900,6 @@ class Parser
 			throw unexpectedToken(peekToken());
 	}
 
-	private SetDirective parseBlockDirective()
-		throws IOException, TemplateSyntaxException
-	{
-		eatToken(TokenType.BLOCK);
-		Expression ident = parseIdentifier();
-		Block content = parseBlock();
-		return new SetDirective(ident, new BlockExpression(content));
-	}
-
 	private WrapperDirective parseWrapperDirective()
 		throws IOException, TemplateSyntaxException
 	{
@@ -952,7 +939,8 @@ class Parser
 			t == TokenType.NOT ||
 			t == TokenType.OPEN_PAREN ||
 			t == TokenType.OPEN_BRACKET ||
-			t == TokenType.OPEN_BRACE;
+			t == TokenType.OPEN_BRACE ||
+			t == TokenType.BLOCK;
 	}
 
 	private Expression parseFactor()
@@ -1141,6 +1129,12 @@ class Parser
 		{
 			eatToken(t);
 			return new Expressions.NotExpression(parseChain());
+		}
+		else if (t == TokenType.BLOCK)
+		{
+			eatToken(t);
+			Block content = parseBlock();
+			return new BlockExpression(content);
 		}
 
 		return parseIdentifier();

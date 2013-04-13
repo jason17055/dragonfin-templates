@@ -5,11 +5,14 @@ Differences from Perl's Template::Toolkit:
  * All math is done using 32-bit signed integers.
 
 
+BLOCK as a directive (in the form [% BLOCK a %]...[% END %] is not
+supported, however BLOCK as an expression is (e.g. [% a = BLOCK %]...[% END %].
+
+
 The following directives from Template::Toolkit are not supported:
 
  CALL
  PROCESS
- BLOCK
 
 
 The following directives are supported with modification:

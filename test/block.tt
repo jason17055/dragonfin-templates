@@ -1,0 +1,9 @@
+[% b1 = BLOCK %]This is a block
+[% END %]
+[% b2 = BLOCK %]This is another block[% END %]
+
+[% b1 %][% b1 %][% b1 %][% b1 %]
+[% b2 %]
+[% b2 %]
+[% b2 %]
+[% b2 %]
