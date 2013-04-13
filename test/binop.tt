@@ -2,149 +2,149 @@
 	yes    = 1
 	no     = 0
 	true   = 'this is true'
-	false  = '0'
+	false  = 0
 	happy  = 'yes'
 	sad    = ''
 	ten    = 10
 	twenty = 20
 %]
---
-maybe
+-- 1--
+Ok 1a
 [% IF yes %]
-yes
+Ok 1b
 [% END %]
---
+-- 2--
 [% IF yes %]
-yes
+Ok
 [% ELSE %]
-no
+NO
 [% END %]
---
-[% IF yes and true %]
-yes
+-- 3--
+[% IF yes AND true %]
+Ok
 [% ELSE %]
-no
+NO
 [% END %]
---
+-- 4--
 [% IF yes && true %]
-yes
+Ok
 [% ELSE %]
-no
+NO
 [% END %]
---
+-- 5--
 [% IF yes && sad || happy %]
-yes
+Ok
 [% ELSE %]
-no
+NO
 [% END %]
---
-[% IF yes AND ten && true and twenty && 30 %]
-yes
+-- 6--
+[% IF (yes AND ten && true AND twenty && 30) %]
+Ok
 [% ELSE %]
-no
+NO
 [% END %]
---
+-- 7--
 [% IF ! yes %]
-no
+NO
 [% ELSE %]
-yes
+Ok
 [% END %]
---
+-- 8--
 [% UNLESS yes %]
-no
+NO
 [% ELSE %]
-yes
+Ok
 [% END %]
---
-[% "yes" UNLEss no %]
---
+-- 9--
+[% "Ok" UNLESS no %]
+--10--
 [% IF yes || no %]
-yes
+Ok
 [% ELSE %]
-no
+NO
 [% END %]
---
+--11--
 [% IF yes || no || true || false %]
-yes
+Ok
 [% ELSE %]
-no
+NO
 [% END %]
---
-[% IF yes or no %]
-yes
+--12--
+[% IF yes OR no %]
+Ok
 [% ELSE %]
-no
+NO
 [% END %]
---
-[% IF not false and not sad %]
-yes
+--13--
+[% IF NOT false AND NOT sad %]
+Ok
 [% ELSE %]
-no
+NO
 [% END %]
---
+--14--
 [% IF ten == 10 %]
-yes
+Ok
 [% ELSE %]
-no
+NO
 [% END %]
---
+--15--
 [% IF ten == twenty %]
-I canna break the laws of mathematics, Captain.
+NO
 [% ELSIF ten > twenty %]
-Your numerical system is inverted. Please reboot your Universe.
+NO
 [% ELSIF twenty < ten %]
-Your inverted system is numerical. Please universe your reboot.
+NO
 [% ELSE %]
 Ok
 [% END %]
---
-[% IF ten >= twenty or false %]
-no
+--16--
+[% IF ten >= twenty OR false %]
+NO
 [% ELSIF twenty <= ten %]
-no
+NO
 [% END %]
 Ok
---
+--17--
 [% IF ten > twenty %]
-no
+NO
 [% ELSIF ten < twenty %]
 Ok
 [% END %]
---
+--18--
 [% IF ten != 10 %]
-no
+NO
 [% ELSIF ten == 10 %]
 Ok
 [% END %]
---
+--19--
 [% IF alpha AND omega %]
 alpha and omega are true
 [% ELSE %]
 alpha and/or omega are not true
 [% END %]
 count: [% count %]
---
+--20--
 [% IF omega AND alpha %]
 omega and alpha are true
 [% ELSE %]
 omega and/or alpha are not true
 [% END %]
 count: [% count %]
---
+--21--
 [% IF alpha OR omega %]
 alpha and/or omega are true
 [% ELSE %]
 neither alpha nor omega are true
 [% END %]
 count: [% count %]
---
+--22--
 [% IF omega OR alpha %]
 omega and/or alpha are true
 [% ELSE %]
 neither omega nor alpha are true
 [% END %]
 count: [% count %]
---
+--23--
 [% small = 5
    mid   = 7
    big   = 10
@@ -161,8 +161,7 @@ left: [% left %]
 mult: [% mult %]
 maxi: [% mult + 2 * 2 %]
 mega: [% mult * 2 + 2 * 3 %]
---
+--24--
 [% 10 mod 4 %] [% 10 MOD 4 %]
 [% 10 div 3 %] [% 10 DIV 3 %]
 --
-

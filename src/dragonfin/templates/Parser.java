@@ -933,7 +933,10 @@ class Parser
 			t == TokenType.SINGLE_QUOTE_STRING ||
 			t == TokenType.DOUBLE_QUOTE_STRING ||
 			t == TokenType.NUMBER ||
-			t == TokenType.NOT;
+			t == TokenType.NOT ||
+			t == TokenType.OPEN_PAREN ||
+			t == TokenType.OPEN_BRACKET ||
+			t == TokenType.OPEN_BRACE;
 	}
 
 	private Expression parseFactor()
