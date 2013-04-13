@@ -1,3 +1,10 @@
+Differences from Perl's Template::Toolkit:
+
+ * "0" (the string) is considered true
+ * All keywords (directives and operators) are required to be upper-case
+ * All math is done using 32-bit signed integers.
+
+
 The following directives from Template::Toolkit are not supported:
 
  CALL
