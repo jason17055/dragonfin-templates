@@ -1,6 +1,8 @@
 package dragonfin.templates;
 
+import javax.script.Bindings;
+
 public interface Function
 {
-	Object invoke(Object... args) throws Exception;
+	Object invoke(Bindings args) throws Exception;
 }
