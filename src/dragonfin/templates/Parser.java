@@ -40,6 +40,7 @@ class Parser
 		NUMBER,
 	//keywords
 		AND,
+		BLOCK,
 		DEFAULT,
 		DIV,
 		ELSE,
@@ -129,6 +130,8 @@ class Parser
 	{
 		if (s.equals("AND"))
 			return new Token(TokenType.AND, s);
+		else if (s.equals("BLOCK"))
+			return new Token(TokenType.BLOCK, s);
 		else if (s.equals("DEFAULT"))
 			return new Token(TokenType.DEFAULT, s);
 		else if (s.equals("DIV"))
@@ -675,7 +678,11 @@ class Parser
 		throws IOException, TemplateSyntaxException
 	{
 		TokenType token = peekToken();
-		if (token == TokenType.DEFAULT)
+		if (token == TokenType.BLOCK)
+		{
+			return parseBlockDirective();
+		}
+		else if (token == TokenType.DEFAULT)
 		{
 			return parseDefaultDirective();
 		}
@@ -895,6 +902,15 @@ class Parser
 		}
 		else
 			throw unexpectedToken(peekToken());
+	}
+
+	private SetDirective parseBlockDirective()
+		throws IOException, TemplateSyntaxException
+	{
+		eatToken(TokenType.BLOCK);
+		Expression ident = parseIdentifier();
+		Block content = parseBlock();
+		return new SetDirective(ident, new BlockExpression(content));
 	}
 
 	private WrapperDirective parseWrapperDirective()
