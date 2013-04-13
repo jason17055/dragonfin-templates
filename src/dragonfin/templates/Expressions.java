@@ -93,16 +93,25 @@ public class Expressions
 			int a1 = Value.asInt(a);
 			int b1 = Value.asInt(b);
 
-			if (op == Parser.TokenType.PLUS)
-			{
+			switch (op) {
+			case PLUS:
 				return new Integer(a1+b1);
-			}
-			else if (op == Parser.TokenType.MINUS)
-			{
+
+			case MINUS:
 				return new Integer(a1-b1);
-			}
-			else
-			{
+
+			case MULTIPLY:
+				return new Integer(a1*b1);
+
+			case DIVIDE:
+			case DIV:
+				return new Integer(a1/b1);
+
+			case PERCENT:
+			case MOD:
+				return new Integer(a1%b1);
+
+			default:
 				throw new Error("invalid arithmetic op: "+op);
 			}
 		}
@@ -127,20 +136,24 @@ public class Expressions
 			Object a = lhs.evaluate(ctx);
 			Object b = rhs.evaluate(ctx);
 
-			if (op == Parser.TokenType.EQUAL)
-			{
+			switch (op) {
+			case EQUAL:
 				return new Boolean(
 					Value.checkEquality(a, b)
 					);
-			}
-			else if (op == Parser.TokenType.NOT_EQUAL)
-			{
+			case NOT_EQUAL:
 				return new Boolean(
 					!Value.checkEquality(a,b)
 					);
-			}
-			else
-			{
+			case GT:
+				return new Boolean( Value.compare(a,b) > 0 );
+			case GE:
+				return new Boolean( Value.compare(a,b) >= 0 );
+			case LT:
+				return new Boolean( Value.compare(a,b) < 0 );
+			case LE:
+				return new Boolean( Value.compare(a,b) <= 0 );
+			default:
 				throw new Error("invalid compare op: "+op);
 			}
 		}
@@ -160,6 +173,54 @@ public class Expressions
 		{
 			Object v = expr.evaluate(ctx);
 			return new Boolean(!Value.asBoolean(v));
+		}
+	}
+
+	static class AndExpression extends Expression
+	{
+		Expression lhs;
+		Expression rhs;
+		public AndExpression(Expression lhs, Expression rhs)
+		{
+			this.lhs = lhs;
+			this.rhs = rhs;
+		}
+
+		@Override
+		public Object evaluate(Context ctx)
+			throws TemplateRuntimeException
+		{
+			Object v = lhs.evaluate(ctx);
+			if (!Value.asBoolean(v)) {
+				return v;
+			}
+			else {
+				return rhs.evaluate(ctx);
+			}
+		}
+	}
+
+	static class OrExpression extends Expression
+	{
+		Expression lhs;
+		Expression rhs;
+		public OrExpression(Expression lhs, Expression rhs)
+		{
+			this.lhs = lhs;
+			this.rhs = rhs;
+		}
+
+		@Override
+		public Object evaluate(Context ctx)
+			throws TemplateRuntimeException
+		{
+			Object v = lhs.evaluate(ctx);
+			if (Value.asBoolean(v)) {
+				return v;
+			}
+			else {
+				return rhs.evaluate(ctx);
+			}
 		}
 	}
 }

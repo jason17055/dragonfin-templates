@@ -1,0 +1,168 @@
+[%
+	yes    = 1
+	no     = 0
+	true   = 'this is true'
+	false  = '0'
+	happy  = 'yes'
+	sad    = ''
+	ten    = 10
+	twenty = 20
+%]
+--
+maybe
+[% IF yes %]
+yes
+[% END %]
+--
+[% IF yes %]
+yes
+[% ELSE %]
+no
+[% END %]
+--
+[% IF yes and true %]
+yes
+[% ELSE %]
+no
+[% END %]
+--
+[% IF yes && true %]
+yes
+[% ELSE %]
+no
+[% END %]
+--
+[% IF yes && sad || happy %]
+yes
+[% ELSE %]
+no
+[% END %]
+--
+[% IF yes AND ten && true and twenty && 30 %]
+yes
+[% ELSE %]
+no
+[% END %]
+--
+[% IF ! yes %]
+no
+[% ELSE %]
+yes
+[% END %]
+--
+[% UNLESS yes %]
+no
+[% ELSE %]
+yes
+[% END %]
+--
+[% "yes" UNLEss no %]
+--
+[% IF yes || no %]
+yes
+[% ELSE %]
+no
+[% END %]
+--
+[% IF yes || no || true || false %]
+yes
+[% ELSE %]
+no
+[% END %]
+--
+[% IF yes or no %]
+yes
+[% ELSE %]
+no
+[% END %]
+--
+[% IF not false and not sad %]
+yes
+[% ELSE %]
+no
+[% END %]
+--
+[% IF ten == 10 %]
+yes
+[% ELSE %]
+no
+[% END %]
+--
+[% IF ten == twenty %]
+I canna break the laws of mathematics, Captain.
+[% ELSIF ten > twenty %]
+Your numerical system is inverted. Please reboot your Universe.
+[% ELSIF twenty < ten %]
+Your inverted system is numerical. Please universe your reboot.
+[% ELSE %]
+Ok
+[% END %]
+--
+[% IF ten >= twenty or false %]
+no
+[% ELSIF twenty <= ten %]
+no
+[% END %]
+Ok
+--
+[% IF ten > twenty %]
+no
+[% ELSIF ten < twenty %]
+Ok
+[% END %]
+--
+[% IF ten != 10 %]
+no
+[% ELSIF ten == 10 %]
+Ok
+[% END %]
+--
+[% IF alpha AND omega %]
+alpha and omega are true
+[% ELSE %]
+alpha and/or omega are not true
+[% END %]
+count: [% count %]
+--
+[% IF omega AND alpha %]
+omega and alpha are true
+[% ELSE %]
+omega and/or alpha are not true
+[% END %]
+count: [% count %]
+--
+[% IF alpha OR omega %]
+alpha and/or omega are true
+[% ELSE %]
+neither alpha nor omega are true
+[% END %]
+count: [% count %]
+--
+[% IF omega OR alpha %]
+omega and/or alpha are true
+[% ELSE %]
+neither omega nor alpha are true
+[% END %]
+count: [% count %]
+--
+[% small = 5
+   mid   = 7
+   big   = 10
+   both  = small + big
+   less  = big - mid
+   half  = big / small
+   left  = big % mid
+   mult  = big * small
+%]
+both: [% both %]
+less: [% less %]
+half: [% half %]
+left: [% left %]
+mult: [% mult %]
+maxi: [% mult + 2 * 2 %]
+mega: [% mult * 2 + 2 * 3 %]
+--
+[% 10 mod 4 %] [% 10 MOD 4 %]
+[% 10 div 3 %] [% 10 DIV 3 %]
+--
+
