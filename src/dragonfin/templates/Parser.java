@@ -82,6 +82,7 @@ class Parser
 		PLUS,
 		MINUS,
 		PERCENT,
+		UNDERSCORE,
 	//other
 		IDENTIFIER,
 		EOF;
@@ -168,6 +169,8 @@ class Parser
 			return new Token(TokenType.UNLESS, s);
 		else if (s.equals("WRAPPER"))
 			return new Token(TokenType.WRAPPER, s);
+		else if (s.equals("_"))
+			return new Token(TokenType.UNDERSCORE, s);
 		else
 			return new Token(TokenType.IDENTIFIER, s);
 	}
@@ -981,6 +984,11 @@ class Parser
 				eatToken(t);
 				Expression rhs = parseTerm();
 				lhs = new Expressions.ArithmeticExpression(lhs, t, rhs);
+			}
+			else if (t == TokenType.UNDERSCORE) {
+				eatToken(t);
+				Expression rhs = parseTerm();
+				lhs = new Concatenate(lhs, rhs);
 			}
 			else {
 				return lhs;
